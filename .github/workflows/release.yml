@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  contents: write
+
 jobs:
   create-release:
     runs-on: ubuntu-latest
@@ -14,9 +17,6 @@ jobs:
 
       - name: Get latest code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.repository.default_branch }}
 
       - name: Bundle files
         run: |
@@ -26,8 +26,23 @@ jobs:
           cd ./temp && zip -r ../pulsar-core.zip ./pulsar-core
 
       - name: Create release
-        uses: 'marvinpinto/action-automatic-releases@v1.2.1'
+        uses: softprops/action-gh-release@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          prerelease: false
+          name: "PULSAR-CORE ${{ github.ref_name }}"
+          body: |
+            ![Pulsar Framework](https://r2.fivemanage.com/GPYOH8Hq4GPyAY7czrgLe/pulsarbanner.png)
+
+            ## PULSAR-CORE ${{ github.ref_name }}
+
+            Core foundation of the Pulsar Framework — middleware, callbacks, player lifecycle, routing, and more.
+
+            ### Installation
+            1. Download `pulsar-core.zip` below
+            2. Extract into your server's `resources` folder
+            3. Add `ensure pulsar-core` to your `server.cfg`
+
+            ---
+            ![Pulsar Framework](https://img.shields.io/badge/Pulsar-Framework-7c3aed?style=flat-square)
+            ![Built for FiveM](https://img.shields.io/badge/Built_for-FiveM-F40552?style=flat-square)
           files: pulsar-core.zip
+          prerelease: false
