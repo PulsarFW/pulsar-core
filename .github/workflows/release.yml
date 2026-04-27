@@ -1,0 +1,33 @@
+name: Create release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install zip
+        run: sudo apt install zip
+
+      - name: Get latest code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Bundle files
+        run: |
+          mkdir -p ./temp/pulsar-core
+          cp ./{README.md,fxmanifest.lua,sh_init.lua,sv_config.lua,weaponanimations.meta} ./temp/pulsar-core
+          cp -r ./{core,exports} ./temp/pulsar-core
+          cd ./temp && zip -r ../pulsar-core.zip ./pulsar-core
+
+      - name: Create release
+        uses: 'marvinpinto/action-automatic-releases@v1.2.1'
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false
+          files: pulsar-core.zip
