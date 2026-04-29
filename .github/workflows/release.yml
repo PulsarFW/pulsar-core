@@ -18,11 +18,14 @@ jobs:
       - name: Get latest code
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
       - name: Bundle files
         run: |
           mkdir -p ./temp/pulsar-core
-          cp ./{README.md,fxmanifest.lua,sh_init.lua,sv_config.lua,weaponanimations.meta} ./temp/pulsar-core
-          cp -r ./{core,exports} ./temp/pulsar-core
+          cp ./{README.md,fxmanifest.lua,package.json,sh_init.lua,sv_config.lua,weaponanimations.meta} ./temp/pulsar-core
+          cp -r ./{core,exports,node_modules} ./temp/pulsar-core
           cd ./temp && zip -r ../pulsar-core.zip ./pulsar-core
 
       - name: Create release
