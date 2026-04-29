@@ -1,10 +1,10 @@
 exports("DiscordRichPresence", function()
 	SetDiscordAppId(exports["pulsar-core"]:GetDiscordApp())
-	SetDiscordRichPresenceAsset("sandboxrp_large_icon")
-	SetDiscordRichPresenceAssetText("Join Today: SandboxRP.gg")
+	SetDiscordRichPresenceAsset("pulsarfw_large_icon")
+	SetDiscordRichPresenceAssetText("Join Today: pulsarfw.com")
 	--SetDiscordRichPresenceAssetSmall("info")
-	SetDiscordRichPresenceAction(0, "Apply Now", "https://sandboxrp.gg")
-	SetDiscordRichPresenceAction(1, "Join Our Discord", "https://discord.gg/sandboxgg")
+	SetDiscordRichPresenceAction(0, "Apply Now", "https://pulsarfw.com")
+	SetDiscordRichPresenceAction(1, "Join Our Discord", "https://discord.gg/pulsarfw")
 
 	CreateThread(function()
 		while true do

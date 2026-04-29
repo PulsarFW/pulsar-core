@@ -34,7 +34,8 @@ AddEventHandler("onResourceStart", function(resource)
 ^6=================================================================================================^7
 ]])
 			print("^6Pulsar Framework ^7" .. ver)
-			print("^8Built on the foundation of the Original Mythic Framework by ^6Alzar^8 & ^6Dr Nick^7")
+			print("^3Maintained by ^6Pulsar Development Team^7")
+			print("^8Special thanks to ^3Autlaww^8 for SQL & export work^7")
 
 			print([[
 ^6=================================================================================================^7
