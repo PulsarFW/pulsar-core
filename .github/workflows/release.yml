@@ -12,18 +12,14 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Install zip
-        run: sudo apt install zip
-
       - name: Get latest code
         uses: actions/checkout@v4
 
       - name: Bundle files
         run: |
-          mkdir -p ./temp/pulsar-core
-          cp ./{README.md,fxmanifest.lua,package.json,sh_init.lua,sv_config.lua,weaponanimations.meta} ./temp/pulsar-core
-          cp -r ./{core,exports} ./temp/pulsar-core
-          cd ./temp && zip -r ../pulsar-core.zip ./pulsar-core
+          mkdir -p staging/pulsar-core
+          rsync -a --exclude='.github' --exclude='node_modules' --exclude='staging' . staging/pulsar-core/
+          cd staging && zip -r ../pulsar-core.zip pulsar-core/
 
       - name: Create release
         uses: softprops/action-gh-release@v2
