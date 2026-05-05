@@ -74,7 +74,7 @@ exports('VersionCheck', function(repo)
     end)
   end
 
-  local current = (GetResourceMetadata(resource, 'version', 0) or ''):gsub('%s+', ''):gsub('^v', '')
+  local current = (GetResourceMetadata(resource, 'version', 0) or ''):match('%d+%.%d+%.%d+') or ''
   local name    = resource:gsub('(%a)([%w]*)', function(a, b) return a:upper() .. b end)
 
   PerformHttpRequest(('https://api.github.com/repos/%s/releases/latest'):format(repo), function(statusCode, body)
@@ -86,12 +86,17 @@ exports('VersionCheck', function(repo)
       'error'
     }
     if statusCode == 200 and body then
-      local tag = body:match('"tag_name"%s*:%s*"([^"]+)"')
-      if tag then
-        entry.newest = tag:gsub('^v', '')
-        entry.status = entry.newest == current and 'ok' or 'outdated'
+      local data = json.decode(body)
+      if data and not data.prerelease then
+        local newest = data.tag_name and data.tag_name:match('%d+%.%d+%.%d+')
+        if newest then
+          entry.newest = newest
+          entry.status = newest == current and 'ok' or 'outdated'
+        end
       end
+    elseif statusCode == 403 or statusCode == 429 then
+      entry.status = 'ratelimited'
     end
     _pending[#_pending + 1] = entry
-  end, 'GET')
+  end, 'GET', '', { ['User-Agent'] = 'Pulsar-VersionCheck' })
 end)
