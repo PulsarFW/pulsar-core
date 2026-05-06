@@ -15,10 +15,13 @@ jobs:
       - name: Get latest code
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --production
+
       - name: Bundle files
         run: |
           mkdir -p staging/pulsar-core
-          rsync -a --exclude='.github' --exclude='node_modules' --exclude='staging' . staging/pulsar-core/
+          rsync -a --exclude='.github' --exclude='staging' . staging/pulsar-core/
           cd staging && zip -r ../pulsar-core.zip pulsar-core/
 
       - name: Create release
